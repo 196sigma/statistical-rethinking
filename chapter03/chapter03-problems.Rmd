@@ -2,7 +2,9 @@
 title: "Chapter 03 Practice Problems"
 author: "Reginald Edwards"
 date: "5/22/2020"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
