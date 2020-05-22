@@ -1,0 +1,88 @@
+---
+title: "Chapter 03 Practice Problems"
+author: "Reginald Edwards"
+date: "5/22/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+```
+
+## Solutions
+
+Setup code for problems:
+```{r}
+p_grid <- seq(from=0, to=1, length.out=1000)
+prior <- rep(1, 1000)
+likelihood <- dbinom(6, size=9, prob=p_grid)
+posterior <- likelihood*prior
+posterior <- posterior/sum(posterior)
+set.seed(100)
+samples <- sample(p_grid, prob=posterior, size=1e4, replace=TRUE)
+```
+
+### Problem 3E1
+```{r}
+sum(samples < .2)/length(samples)
+```
+
+```{r, echo=FALSE}
+dens <- density(samples)
+dd <- with(dens, data.frame(x,y))
+qplot(x,y,data=dd,geom="line") + geom_ribbon(data=subset(dd, x < .2), aes(ymax=y),ymin=0,
+              fill="blue",colour=NA,alpha=0.5)
+```
+
+### Problem 3E2
+```{r}
+sum(samples > .8)/length(samples)
+```
+
+```{r, echo=FALSE}
+dens <- density(samples)
+dd <- with(dens, data.frame(x,y))
+qplot(x,y,data=dd,geom="line") + geom_ribbon(data=subset(dd, x > .8), aes(ymax=y),ymin=0,
+              fill="blue",colour=NA,alpha=0.5)
+```
+
+### Problem 3E3
+```{r}
+sum(samples > .2 & samples < .8)/length(samples)
+```
+
+```{r, echo=FALSE}
+dens <- density(samples)
+dd <- with(dens, data.frame(x,y))
+qplot(x,y,data=dd,geom="line") + geom_ribbon(data=subset(dd, x >.2 & x < .8), aes(ymax=y),ymin=0,
+              fill="blue",colour=NA,alpha=0.5)
+```
+
+### Problem 3E4
+```{r}
+quantile(samples, .2)
+```
+
+
+```{r, echo=FALSE}
+q20 <- quantile(samples, .2)
+dens <- density(samples)
+dd <- with(dens, data.frame(x,y))
+qplot(x,y,data=dd,geom="line") + geom_ribbon(data=subset(dd, x < q20), aes(ymax=y),ymin=0,
+              fill="blue",colour=NA,alpha=0.5)
+```
+
+### Problem 3E5
+```{r}
+quantile(samples, .8)
+```
+
+
+```{r, echo=FALSE}
+q80 <- quantile(samples, .8)
+dens <- density(samples)
+dd <- with(dens, data.frame(x,y))
+qplot(x,y,data=dd,geom="line") + geom_ribbon(data=subset(dd, x > q80), aes(ymax=y),ymin=0,
+              fill="blue",colour=NA,alpha=0.5)
+```
