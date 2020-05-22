@@ -8,7 +8,8 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, fig.width=4, fig.height=2)
+
 library(ggplot2)
 ```
 
@@ -36,6 +37,7 @@ dd <- with(dens, data.frame(x,y))
 qplot(x,y,data=dd,geom="line") + geom_ribbon(data=subset(dd, x < .2), aes(ymax=y),ymin=0,
               fill="blue",colour=NA,alpha=0.5)
 ```
+In the above plot, the shaded region (from -Infinity to .2) is too small to see.
 
 ### Problem 3E2
 ```{r}
