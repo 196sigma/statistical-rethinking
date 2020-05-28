@@ -70,4 +70,19 @@ rethinking::PI(samples, prob=0.5)
 rethinking::HPDI(samples, prob=0.5)
 
 ## 
-``
+rm(list=ls())
+gc()
+p_grid <- seq(from=0, to=1, length.out=1000)
+prior <- rep(1, 1000)
+likelihood <- dbinom(6, size=9, prob=p_grid)
+posterior <- likelihood*prior
+posterior <- posterior/sum(posterior)
+samples <- sample(p_grid, size=1e4, replace=TRUE, prob=posterior)
+plot(posterior, type='l')
+abline(v = 1000*seq(0.1,.9,.1))
+par(mfrow=c(1,9), mar=c(4,2,1,3))
+for( i in seq(0.1, 0.9, .1)) rethinking::simplehist(rbinom(1e4, size=9, prob=i), xlab = i, ylab = NA, ylim=c(0,4000))
+
+par(mfrow = c(1,1), mar=c(4,4,4,4))
+w <- rbinom(1e4, size=9, prob=samples)
+rethinking::simplehist(w)

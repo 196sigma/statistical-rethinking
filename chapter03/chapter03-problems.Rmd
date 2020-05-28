@@ -11,6 +11,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE, fig.width=4, fig.height=2)
 
 library(ggplot2)
+library(rethinking)
 ```
 
 ## Solutions
@@ -37,6 +38,7 @@ dd <- with(dens, data.frame(x,y))
 qplot(x,y,data=dd,geom="line") + geom_ribbon(data=subset(dd, x < .2), aes(ymax=y),ymin=0,
               fill="blue",colour=NA,alpha=0.5)
 ```
+
 In the above plot, the shaded region (from -Infinity to .2) is too small to see.
 
 ### Problem 3E2
@@ -89,4 +91,57 @@ dens <- density(samples)
 dd <- with(dens, data.frame(x,y))
 qplot(x,y,data=dd,geom="line") + geom_ribbon(data=subset(dd, x > q80), aes(ymax=y),ymin=0,
               fill="blue",colour=NA,alpha=0.5)
+```
+
+### Problem 3E6
+```{r}
+rethinking::HPDI(samples, prob=.66)
+```
+
+### Problem 3E7
+Solving this two ways (with $rethinking$ and without)
+```{r, echo}
+quantile(samples, probs=c((1-.66)/2, 1-(1-.66)/2))
+rethinking::PI(samples, prob=.66)
+```
+
+
+### Problem 3M1
+```{r}
+p_grid <- seq(from=0, to=1, length.out=1000)
+prior <- rep(1, 1000)
+likelihood <- dbinom(8, size=15, prob=p_grid)
+posterior <- likelihood*prior
+posterior <- posterior/sum(posterior)
+samples <- sample(p_grid, prob=posterior, size=1e4, replace=TRUE)
+```
+
+```{r, echo=FALSE}
+ggplot(NULL, aes(x=samples)) + geom_density()
+```
+
+
+### Problem 3M2
+```{r, echo=FALSE}
+rethinking::HPDI(samples, prob=.9)
+```
+
+### Problem 3M3
+```{r, echo=FALSE}
+
+```
+
+### Problem 3M4
+```{r, echo=FALSE}
+
+```
+
+### Problem 3M5
+```{r, echo=FALSE}
+
+```
+
+### Problem 3M6
+```{r, echo=FALSE}
+
 ```
