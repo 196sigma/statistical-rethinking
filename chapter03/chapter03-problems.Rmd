@@ -113,26 +113,28 @@ prior <- rep(1, 1000)
 likelihood <- dbinom(8, size=15, prob=p_grid)
 posterior <- likelihood*prior
 posterior <- posterior/sum(posterior)
-samples <- sample(p_grid, prob=posterior, size=1e4, replace=TRUE)
+plot(posterior)
+```
+
+
+### Problem 3M2
+```{r}
+samples <- sample(p_grid, size=10000, replace=TRUE, prob=posterior)
+rethinking::HPDI(samples, prob=.9)
 ```
 
 ```{r, echo=FALSE}
 ggplot(NULL, aes(x=samples)) + geom_density()
 ```
 
-
-### Problem 3M2
-```{r, echo=FALSE}
-rethinking::HPDI(samples, prob=.9)
-```
-
 ### Problem 3M3
-```{r, echo=FALSE}
-
+```{r}
+w <- rbinom(1e4, size=15, prob=samples)
+plot(density(w))
 ```
 
 ### Problem 3M4
-```{r, echo=FALSE}
+```{r}
 
 ```
 
