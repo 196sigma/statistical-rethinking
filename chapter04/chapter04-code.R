@@ -220,4 +220,35 @@ mu.HPDI <- apply(mu, 2, rethinking::HPDI)
 rethinking::shade(mu.HPDI, weight.seq)
 rethinking::shade(height.PI, weight.seq)
 
-# 4.5 Curves from lines
+
+# 4.5 Curves from lines 
+
+
+## 4.65 - 4.66
+d$weight_s <- (d$weight - mean(d$weight))/sd(d$weight)
+d$weight_s2 <- d$weight_s**2
+m4.5 <- rethinking::quap(alist(height ~ dnorm(mu, sigma),
+                               mu <- a + b1*weight_s + b2*weight_s2,
+                               a ~ dnorm(178,20),
+                               b1 ~ dlnorm(0,1),
+                               b2 ~ dnorm(0,1),
+                               sigma ~ dunif(0, 50)),
+                               data = d)
+rethinking::precis(m4.5)
+
+plot(height ~ weight_s, data=d, col=col.alpha(rangi2, 0.5))
+
+## 4.67
+weight.seq <- seq(from = -2, to=2, length.out=30)
+pred_dat <- list(weight_s=weight.seq, weight_s2=weight.seq**2)
+mu <- rethinking::link(m4.5, data=pred_dat)
+mu.mean <- apply(mu, 2, mean)
+mu.PI <- apply(mu, 2, rethinking::PI, prob=0.89)
+sim.height <- rethinking::sim(m4.5, data=pred_dat)
+height.PI <- apply(sim.height, 2, PI, prob=0.89)
+
+## 4.68
+plot(height ~ weight_s, data=d, col=col.alpha(rangi2, 0.5))
+lines(weight.seq, mu.mean)
+shade(mu.PI, weight.seq)
+shade(height.PI, weight.seq)

@@ -27,9 +27,46 @@ set.seed(100)
 samples <- sample(p_grid, prob=posterior, size=1e4, replace=TRUE)
 ```
 
-### Problem 3E1
+### Problem 4E1
+The likelihood is $y_i ~ Normal(\mu, \sigma)$
+
+### Problem 4E2
+
+### Problem 4E3
+$Pr(\mu, \sigma | y) = \frac{\Pi_i N(0,10)Exp(1)N(y_i|\mu, \sigma)}{\int \int \Pi_i N(0,10)Exp(1)N(y_i|\mu, \sigma)d\mu d\sigma}$
+
+### Problem 4E4
+The second line, $\mu_i = \alpha + \beta x_i$, is the linear model.
+
+### Problem 4E5
+
+### Problem 4M1
 ```{r}
+n <- 1e4
+sample_mu <- rnorm(n, 0, 10)
+sample_sigma <- rexp(n, 1)
+prior_h <- rnorm(n, sample_mu, sample_sigma)
+rethinking::dens(prior_h)
 ```
+
+### Problem 4M2
+```{r}
+flist <- alist(y ~ rnorm(mu, sigma),
+               mu ~ dnorm(0, 10),
+               sigma ~ dexp(1))
+```
+
+### Problem 4M3
+$$
+\begin{aligned}
+y_i &\sim N(\mu, \sigma) \\
+\mu &= \alpha + \beta x_i \\
+\alpha &\sim N(0,10) \\
+\beta &\sim Uni[0,1] \\
+\sigma &\sim Exp(1)
+\end{aligned}
+$$
+## Problem 4M4
 
 ```{r, echo=FALSE}
 ```
